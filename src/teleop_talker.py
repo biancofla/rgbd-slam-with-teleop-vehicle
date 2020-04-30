@@ -8,8 +8,9 @@ import os
 key_command = {'w': 'Up', 'a': 'Left', 's': 'Down', 'd': 'Right'}
 current_msg = ''
 
-def on_press(key):
-    """ Funzione di callback scatenata alla pressione di un
+def _on_press(key):
+    """ 
+        Funzione di callback scatenata alla pressione di un
         qualunque input da tastiera.
 
         Args:
@@ -23,8 +24,9 @@ def on_press(key):
     else:
         current_msg = ''
 
-def on_release(key):
-    """ Funzione di callback scatenata al rilascio di un
+def _on_release(key):
+    """ 
+        Funzione di callback scatenata al rilascio di un
         qualunque input da tastiera.
 
         Args:
@@ -37,7 +39,8 @@ def on_release(key):
         current_msg = 'Stop'
 
 def teleop_talker():
-    """ Registra gli input provenienti dalla tastiera e li invia
+    """ 
+        Registra gli input provenienti dalla tastiera e li invia
         attraverso messaggi al topic /teleop_keyboard.
     """
     # Definiamo un nuovo nodo ROS.
@@ -49,29 +52,30 @@ def teleop_talker():
 
     global current_msg
 
-    listener = Listener(on_press=on_press, on_release=on_release)
+    listener = Listener(on_press=_on_press, on_release=_on_release)
     listener.start()
 
-    # TODO: Le stampe di rospy sembrano non funzionare da bash.
-    # Forse è un problema di threading?
+    # TODO: Il programma va in stallo se lanciato da un terminale
+    # che non sia quello dell'editor. E' un problema di threading?
 
-    while listener.running and not rospy.is_shutdown():
+    while not rospy.is_shutdown():
         if current_msg != '':
             pub.publish(String(current_msg))
 
-            rospy.loginfo('Ho inviato il comando {0}.'.format(current_msg))
+            #rospy.loginfo('Ho inviato il comando {0}.'.format(current_msg))
 
             current_msg = ''
-
+            
         rate.sleep()
 
 def print_usage():
-    """ Stampa una guida all'utilizzo.
+    """ 
+        Stampa una guida all'utilizzo.
     """
     print("Utilizza i tasti w, a, s, d per la navigazione. Premi Ctrl+c per uscire.\n")
-    print((" "*35) + "W" + (" "*10))
-    print((" "*25) + "A" + (" "*19) +  "S")
-    print((" "*35) + "S" + (" "*10) + "\n")
+    print((" "*35) + "w" + (" "*10))
+    print((" "*25) + "a" + (" "*19) +  "d")
+    print((" "*35) + "s" + (" "*10) + "\n")
 
 if __name__ == "__main__":
     print_usage()
