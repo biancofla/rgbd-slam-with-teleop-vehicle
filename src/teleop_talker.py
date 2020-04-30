@@ -50,6 +50,8 @@ def teleop_talker():
     # Impostiamo la frequenza dei messaggi inviati al secondo.
     rate = rospy.Rate(10)
 
+    global current_msg
+
     listener = Listener(on_press=_on_press, on_release=_on_release)
     listener.start()
 
