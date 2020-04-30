@@ -1,57 +1,85 @@
 #!/usr/bin/env python3
-import rospy
-import sys
-from std_msgs.msg import String
-from pynput.keyboard import Key, Listener
 import os
-import termios
-import atexit
+import rospy
+from std_msgs.msg import String
+from pynput.keyboard import Key, Listener, Events
+
 
 key_command = {'w': 'Up', 'a': 'Left', 's': 'Down', 'd': 'Right'}
+current_msg = ''
+
+def _on_press(key):
+    """ 
+        Funzione di callback scatenata alla pressione di un
+        qualunque input da tastiera.
+
+        Args:
+            key (KeyCode object): oggetto di tipo KeyCode
+            identificante l'input da tastiera.
+    """
+    global current_msg
+
+    if hasattr(key, 'char') and key.char in key_command.keys():
+        current_msg = key_command[key.char]
+    else:
+        current_msg = ''
+
+def _on_release(key):
+    """ 
+        Funzione di callback scatenata al rilascio di un
+        qualunque input da tastiera.
+
+        Args:
+            key (KeyCode object): oggetto di tipo KeyCode
+            identificante l'input da tastiera.
+    """
+    global current_msg
+
+    if hasattr(key, 'char') and key.char in key_command.keys():
+        current_msg = 'Stop'
 
 def teleop_talker():
+    """ 
+        Registra gli input provenienti dalla tastiera e li invia
+        attraverso messaggi al topic /teleop_keyboard.
+    """
     # Definiamo un nuovo nodo ROS.
     rospy.init_node('teleop_talker', anonymous=True)
     # Registriamo il nuovo nodo come publicatore su un topic.
     pub = rospy.Publisher('teleop_keyboard', String, queue_size=10)
-    # Definiamo un tasso di publicazione dei messaggi.
+    # Impostiamo la frequenza dei messaggi inviati al secondo.
     rate = rospy.Rate(10)
 
-    def on_press(key):
-        if not hasattr(key, 'char'): return False
+    listener = Listener(on_press=_on_press, on_release=_on_release)
+    listener.start()
 
-        if key.char in key_command.keys():
-            command = key_command[key.char]
+    while not rospy.is_shutdown():
+        if current_msg != '':
+            pub.publish(String(current_msg))
 
-            pub.publish(String(command))
+            rospy.loginfo('Ho appena inviato il comando {0}.' \
+                          .format(current_msg))
 
-            #rospy.loginfo('Ho inviato il comando {0}.'.format(command))
-        elif key.char == 'q': return False
+            current_msg = ''
+        rate.sleep()
 
-    def on_release(key):
-        if not hasattr(key, 'char'): return False
-
-        if key.char in key_command.keys():
-            pub.publish(String('Stop'))
-
-            #rospy.loginfo('Ho inviato il comando Stop.')
-
-    with Listener(on_press=on_press, on_release=on_release) as listener:
-        listener.join()
-
-def enable_echo(enable):
-    fd = sys.stdin.fileno()
-    new = termios.tcgetattr(fd)
-
-    if enable:
-        new[3] |= termios.ECHO
-    else:
-        new[3] &= not termios.ECHO
-
-    termios.tcsetattr(fd, termios.TCSANOW, new)
+def print_usage():
+    """ 
+        Stampa una guida all'utilizzo.
+    """
+    print("Utilizza i tasti w, a, s, d per la navigazione.", \
+          "Premi Ctrl+c per uscire.\n")
+    print((" "*35) + "w" + (" "*10))
+    print((" "*25) + "a" + (" "*19) +  "d")
+    print((" "*35) + "s" + (" "*10) + "\n")
 
 if __name__ == "__main__":
-    atexit.register(enable_echo, True)
-    enable_echo(False)
+    print_usage()
+    
+    # Nascondiamo gli input inseriti da tastiera.
+    os.system('stty -echo')
 
     teleop_talker()
+
+    # Rendiamo nuovamente visibili gli input inseriti da tastiera.
+    os.system("stty  echo")
