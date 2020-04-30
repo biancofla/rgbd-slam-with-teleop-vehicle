@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-import rospy
-import sys
-from std_msgs.msg import String
-from pynput.keyboard import Key, Listener
 import os
+import rospy
+from std_msgs.msg import String
+from pynput.keyboard import Key, Listener, Events
+
 
 key_command = {'w': 'Up', 'a': 'Left', 's': 'Down', 'd': 'Right'}
 current_msg = ''
@@ -50,29 +50,25 @@ def teleop_talker():
     # Impostiamo la frequenza dei messaggi inviati al secondo.
     rate = rospy.Rate(10)
 
-    global current_msg
-
     listener = Listener(on_press=_on_press, on_release=_on_release)
     listener.start()
-
-    # TODO: Il programma va in stallo se lanciato da un terminale
-    # che non sia quello dell'editor. E' un problema di threading?
 
     while not rospy.is_shutdown():
         if current_msg != '':
             pub.publish(String(current_msg))
 
-            #rospy.loginfo('Ho inviato il comando {0}.'.format(current_msg))
+            rospy.loginfo('Ho appena inviato il comando {0}.' \
+                          .format(current_msg))
 
             current_msg = ''
-            
         rate.sleep()
 
 def print_usage():
     """ 
         Stampa una guida all'utilizzo.
     """
-    print("Utilizza i tasti w, a, s, d per la navigazione. Premi Ctrl+c per uscire.\n")
+    print("Utilizza i tasti w, a, s, d per la navigazione.", \
+          "Premi Ctrl+c per uscire.\n")
     print((" "*35) + "w" + (" "*10))
     print((" "*25) + "a" + (" "*19) +  "d")
     print((" "*35) + "s" + (" "*10) + "\n")
