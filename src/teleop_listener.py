@@ -3,7 +3,7 @@ import rospy
 from std_msgs.msg import String
 
 def callback(data):
-    rospy.loginfo('Ho ricevuto il comando {0}'.format(data.data))
+    rospy.loginfo('Ho ricevuto il comando {0}.'.format(data.data))
 
 def teleop_listener():
     """ Ascolta i messaggi provenienti dal topic /teleop_keyboard.
