@@ -2,10 +2,9 @@
 import os
 import rospy
 from std_msgs.msg import String
-from pynput.keyboard import Key, Listener, Events
+from pynput.keyboard import Key, Listener
 
-
-key_command = {'w': 'Up', 'a': 'Left', 's': 'Down', 'd': 'Right'}
+available_cmd = ['w', 'a', 's', 'd']
 current_msg = ''
 
 def _on_press(key):
@@ -19,8 +18,8 @@ def _on_press(key):
     """
     global current_msg
 
-    if hasattr(key, 'char') and key.char in key_command.keys():
-        current_msg = key_command[key.char]
+    if hasattr(key, 'char') and key.char in available_cmd:
+        current_msg = key.char
     else:
         current_msg = ''
 
@@ -35,8 +34,8 @@ def _on_release(key):
     """
     global current_msg
 
-    if hasattr(key, 'char') and key.char in key_command.keys():
-        current_msg = 'Stop'
+    if hasattr(key, 'char') and key.char in available_cmd:
+        current_msg = 'x'
 
 def teleop_talker():
     """ 
