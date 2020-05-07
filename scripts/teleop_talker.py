@@ -8,14 +8,6 @@ available_cmd = ['w', 'a', 's', 'd']
 current_msg = ''
 
 def _on_press(key):
-    """ 
-        Funzione di callback scatenata alla pressione di un
-        qualunque input da tastiera.
-
-        Args:
-            key (KeyCode object): oggetto di tipo KeyCode
-            identificante l'input da tastiera.
-    """
     global current_msg
 
     if hasattr(key, 'char') and key.char in available_cmd:
@@ -24,14 +16,6 @@ def _on_press(key):
         current_msg = ''
 
 def _on_release(key):
-    """ 
-        Funzione di callback scatenata al rilascio di un
-        qualunque input da tastiera.
-
-        Args:
-            key (KeyCode object): oggetto di tipo KeyCode
-            identificante l'input da tastiera.
-    """
     global current_msg
 
     if hasattr(key, 'char') and key.char in available_cmd:
@@ -39,14 +23,14 @@ def _on_release(key):
 
 def teleop_talker():
     """ 
-        Registra gli input provenienti dalla tastiera e li invia
-        attraverso messaggi al topic /teleop_keyboard.
+        Register keyboard events and send them, as String
+        messages, to /teleop_keyboard topic.
     """
-    # Definiamo un nuovo nodo ROS.
+    # Define a new ROS node.
     rospy.init_node('teleop_talker', anonymous=True)
-    # Registriamo il nuovo nodo come publicatore su un topic.
+    # Register the node as publisher to a specific topic.
     pub = rospy.Publisher('teleop_keyboard', String, queue_size=10)
-    # Impostiamo la frequenza dei messaggi inviati al secondo.
+    # Set sent messages frequency per second.
     rate = rospy.Rate(10)
 
     global current_msg
@@ -58,18 +42,18 @@ def teleop_talker():
         if current_msg != '':
             pub.publish(String(current_msg))
 
-            rospy.loginfo('Ho appena inviato il comando {0}.' \
-                          .format(current_msg))
+            rospy.loginfo('I sent the message {0}.'.format(current_msg))
 
             current_msg = ''
+
         rate.sleep()
 
 def print_usage():
     """ 
-        Stampa una guida all'utilizzo.
+        Print an helper guide.
     """
-    print("Utilizza i tasti w, a, s, d per la navigazione.", \
-          "Premi Ctrl+c per uscire.\n")
+    print("Use w, a, s, d to move the robot, release to stop it.", \
+          "Press Ctrl+c to exit.\n")
     print((" "*35) + "w" + (" "*10))
     print((" "*25) + "a" + (" "*19) +  "d")
     print((" "*35) + "s" + (" "*10) + "\n")
@@ -77,10 +61,10 @@ def print_usage():
 if __name__ == "__main__":
     print_usage()
     
-    # Nascondiamo gli input inseriti da tastiera.
+    # Hide keyboard inputs.
     os.system('stty -echo')
 
     teleop_talker()
 
-    # Rendiamo nuovamente visibili gli input inseriti da tastiera.
+    # Show keyboard inputs.
     os.system("stty  echo")
