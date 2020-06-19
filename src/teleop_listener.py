@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-import os
-import time
-import rospy
-import serial
 from std_msgs.msg import String
+import serial
+import rospy
+import time
+import os
 
 ser = serial.Serial('/dev/ttyACM0', 9600)
 time.sleep(1)

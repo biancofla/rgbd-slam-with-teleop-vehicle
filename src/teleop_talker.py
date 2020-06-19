@@ -22,7 +22,7 @@ def _on_press(key):
         elif key.char == 'e' and current_vel < 1:
             current_vel += 0.1
 
-            rospy.loginfo('Velocities increased {0}%.' \
+            rospy.loginfo('Velocities increased to {0}%.' \
                 .format(math.floor(current_vel * 100)))
 
         current_msg = key.char
