@@ -55,6 +55,8 @@ export ROS_IP=<ip-dispositivo-corrente>
 
 ### Guida teleoperata
 
+[![](https://img.youtube.com/vi/TUHRMXqMq3Y/0.jpg)](https://youtu.be/TUHRMXqMq3Y)
+
 #### Lato server - Robot mobile
 
 Fare l'upload dello sketch Arduino `arduino_cmd.ino` attraverso l'apposito ambiente di sviluppo e lanciare il comando
@@ -72,6 +74,9 @@ Lanciare il comando
 L'operazione di acquisizione e visualizzazione delle immagini attraverso il sensore di visione di Kinect può essere effettuata in due modalità differenti
 - utilizzando solo il robot mobile
 - sfruttando la logica client-server
+
+[![](https://img.youtube.com/vi/f8B4taeDggw/0.jpg)](https://youtu.be/f8B4taeDggw)
+[![](https://img.youtube.com/vi/viF9TI1LlGg/0.jpg)](https://youtu.be/viF9TI1LlGg)
 
 #### Lato server - Robot mobile
 
@@ -103,6 +108,8 @@ Lanciare il comando
 `rosrun  rgbd-slam-with-teleop-vehicle kinect_visualizer.py`
 
 ### Guida teleoperata con acquisizione delle immagini e RGB-D SLAM
+
+[![](https://img.youtube.com/vi/qfKFda2wjDI/0.jpg)](https://youtu.be/qfKFda2wjDI)
 
 #### Lato server - Robot mobile
 
