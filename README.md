@@ -48,9 +48,9 @@ Occorre clonare il package e configurarlo similmente a quanto fatto sul computer
 Occorre configurare - lato client e lato server - delle variabili d'ambiente utili a definire su quale delle due parti verrà eseguito il nodo master di ROS. Bisogna quindi aggiungere al file `.bashrc` o `.zshrc` le linee di codice
 
 ```bash
-	export ROS_MASTER_URI=<uri-master>
-	export ROS_HOSTNAME=<ip-dispositivo-corrente>
-	export ROS_IP=<ip-dispositivo-corrente>
+export ROS_MASTER_URI=<uri-master>
+export ROS_HOSTNAME=<ip-dispositivo-corrente>
+export ROS_IP=<ip-dispositivo-corrente>
 ```
 
 ### Guida teleoperata
@@ -90,8 +90,8 @@ Lanciare il comando
 Lanciare i comandi
 
 ``` bash
-	roslaunch freenect_launch freenect.launch depth_registration:=true
-	rosrun rgbd-slam-with-teleop-vehicle kinect_listener.py
+roslaunch freenect_launch freenect.launch depth_registration:=true
+rosrun rgbd-slam-with-teleop-vehicle kinect_listener.py
 ````
 
 #### Lato client - Computer remoto
@@ -109,8 +109,8 @@ Lanciare il comando
 Fare l'upload dello sketch Arduino `arduino_cmd.ino` attraverso l'apposito ambiente di sviluppo, lanciare i comandi
 
 ``` bash
-	rosrun rgbd-slam-with-teleop-vehicle teleop_listener.py
-	rtabmap
+rosrun rgbd-slam-with-teleop-vehicle teleop_listener.py
+rtabmap
 ```
 
 Aperto RTAB-Map, occorre configurarlo attraverso i seguenti passaggi:
