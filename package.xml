@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>progettovp</name>
-  <version>20.5.22</version>
-  <description>The progettovp package</description>
+  <name>rgbd-slam-with-teleop-vehicle</name>
+  <version>20.6.20</version>
+  <description>The rgbd-slam-with-teleop-vehicle package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
