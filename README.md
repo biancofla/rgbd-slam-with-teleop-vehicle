@@ -101,6 +101,10 @@ rosrun rgbd-slam-with-teleop-vehicle kinect_listener.py
 
 #### Lato client - Computer remoto
 
+Lanciare il comando
+
+`rosrun  rgbd-slam-with-teleop-vehicle teleop_talker.py`
+
 ##### Acquisizione mediante logica client-server
 
 Lanciare il comando
